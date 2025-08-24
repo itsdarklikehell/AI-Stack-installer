@@ -1,6 +1,6 @@
 #!/bin/bash
 export UV_LINK_MODE=copy
-cd /media/"$USER"/RAIDSTATION/AI-Stack-installer || exit 1
+cd "/media/$USER/RAIDSTATION/AI-Stack-installer" || exit 1
 
 if [ ! -d SwarmUI ]; then
     install-SwarmUI-linux.sh
@@ -26,6 +26,10 @@ if [ -d SwarmUI ]; then
             pip install -r requirements.txt >/dev/null 2>&1
         fi
     fi
-    cd /media/"$USER"/RAIDSTATION/AI-Stack-installer/SwarmUI || exit 1
-    ./launch-linux.sh "$@"
+    
+    cd "/media/$USER/RAIDSTATION/AI-Stack-installer/SwarmUI" || exit 1
+    
+    if [ -f launch-linux.sh ]; then
+        ./launch-linux.sh "$@"
+    fi
 fi

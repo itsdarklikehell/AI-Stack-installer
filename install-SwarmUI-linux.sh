@@ -88,7 +88,7 @@ RestartSec=5s
 Type=simple
 User=$USER
 Group=$USER
-WorkingDirectory=$SCRIPT_DIR/ComfyUI
+WorkingDirectory=$SCRIPT_DIR/SwarmUI/dlbackend/ComfyUI
 ExecStart=$SCRIPT_DIR/Launch_ComfyUI.sh
 
 [Install]
@@ -103,6 +103,6 @@ fi
 if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
-xdg-open http://localhost:7801 >/dev/null 2>&1 &
+# xdg-open http://localhost:7801 >/dev/null 2>&1 &
 
 # watch sudo systemctl status SwarmUI ComfyUI
