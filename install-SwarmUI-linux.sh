@@ -52,14 +52,14 @@ chmod +x dotnet-install.sh
 cd ..
 
 # Note: manual installers that want to avoid home dir, add to both of the below lines: --install-dir $SCRIPT_DIR/.dotnet
-./launchtools/dotnet-install.sh --channel 8.0 --runtime aspnetcore
-./launchtools/dotnet-install.sh --channel 8.0
+./launchtools/dotnet-install.sh --channel 8.0 --runtime aspnetcore >/dev/null 2>&1
+./launchtools/dotnet-install.sh --channel 8.0 >/dev/null 2>&1
 
 # Launch
 # ./launch-linux.sh "$@"
 
 # Setup systemd services
-cat << EOF | sudo tee /etc/systemd/system/SwarmUI.service
+cat << EOF | sudo tee /etc/systemd/system/SwarmUI.service >/dev/null 2>&1
 [Unit]
 Description=SwarmUI Service
 After=network.target
@@ -77,7 +77,7 @@ ExecStart=$SCRIPT_DIR/Launch_SwarmUI.sh
 WantedBy=multi-user.target
 EOF
 
-cat << EOF | sudo tee /etc/systemd/system/ComfyUI.service
+cat << EOF | sudo tee /etc/systemd/system/ComfyUI.service >/dev/null 2>&1
 [Unit]
 Description=ComfyUI Service
 After=network.target
@@ -103,5 +103,5 @@ fi
 if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
-sudo systemctl status SwarmUI
+watch sudo systemctl status SwarmUI ComfyUI
 xdg-open http://localhost:7801 >/dev/null 2>&1 &
