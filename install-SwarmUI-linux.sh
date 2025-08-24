@@ -3,14 +3,20 @@ export UV_LINK_MODE=copy
 
 sudo systemctl stop SwarmUI
 sudo systemctl stop ComfyUI
+if [ -f /etc/systemd/system/SwarmUI.service ]; then
+    sudo rm /etc/systemd/system/SwarmUI.service
+fi
+if [ -f /etc/systemd/system/ComfyUI.service ]; then
+    sudo rm /etc/systemd/system/ComfyUI.service
+fi
 
 if [ ! -d ~/bin ]; then
     echo "Created ~/bin directory"
     mkdir ~/bin
 fi
-ln -s install-SwarmUI-linux.sh ~/bin/
-ln -s Launch_ComfyUI.sh ~/bin/
-ln -s Launch_SwarmUI.sh ~/bin/
+ln -s install-SwarmUI-linux.sh ~/bin/ >/dev/null 2>&1
+ln -s Launch_ComfyUI.sh ~/bin/ >/dev/null 2>&1
+ln -s Launch_SwarmUI.sh ~/bin/ >/dev/null 2>&1
 
 # Ensure correct local path.
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -56,7 +62,7 @@ cd ..
 # ./launch-linux.sh "$@"
 
 # Setup systemd services
-cat << EOF | sudo tee /etc/systemd/system/SwarmUI.service > /dev/null
+cat << EOF | sudo tee /etc/systemd/system/SwarmUI.service
 [Unit]
 Description=SwarmUI Service
 After=network.target
@@ -68,13 +74,13 @@ Type=simple
 User=rizzo
 Group=rizzo
 WorkingDirectory=$SCRIPT_DIR/SwarmUI
-ExecStart=/home/rizzo/bin/Launch_SwarmUI.sh
+ExecStart=$SCRIPT_DIR/Launch_SwarmUI.sh
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-cat << EOF | sudo tee /etc/systemd/system/ComfyUI.service > /dev/null
+cat << EOF | sudo tee /etc/systemd/system/ComfyUI.service
 [Unit]
 Description=ComfyUI Service
 After=network.target
@@ -86,17 +92,18 @@ Type=simple
 User=rizzo
 Group=rizzo
 WorkingDirectory=$SCRIPT_DIR/ComfyUI
-ExecStart=/home/rizzo/bin/Launch_ComfyUI.sh
+ExecStart=$SCRIPT_DIR/Launch_ComfyUI.sh
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 sudo systemctl daemon-reload
-if [ -d /media/rizzo/RAIDSTATION/SwarmUI ]; then
+if [ -f /etc/systemd/system/SwarmUI.service ]; then
     sudo systemctl start SwarmUI
 fi
 
-if [ -d /media/rizzo/RAIDSTATION/SwarmUI/dlbackend/ComfyUI ]; then
+if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
+sudo systemctl status SwarmUI
