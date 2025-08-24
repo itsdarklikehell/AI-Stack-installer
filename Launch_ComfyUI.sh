@@ -27,7 +27,7 @@ if [ -d SwarmUI ]; then
         fi
 
         comfy --install-completion
-        comfy install --restore
+        # comfy install --restore
 
         cd /media/"$USER"/RAIDSTATION/AI-Stack-installer/SwarmUI/dlbackend/ComfyUI || exit 1
         # comfy launch -- --listen 0.0.0.0 --preview-method auto
