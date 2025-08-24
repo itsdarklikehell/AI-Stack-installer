@@ -15,8 +15,8 @@ if [ -d SwarmUI ]; then
         source venv/bin/activate
 
         pip install -r requirements.txt >/dev/null 2>&1
-        pip install -u pip >/dev/null 2>&1
-        pip install -u comfy-cli >/dev/null 2>&1
+        pip install --upgrade pip >/dev/null 2>&1
+        pip install --upgrade comfy-cli >/dev/null 2>&1
 
         # Install ComfyUI-Manager if not present
         if [ ! -d custom_nodes/ComfyUI-Manager ]; then
@@ -26,7 +26,11 @@ if [ -d SwarmUI ]; then
             pip install -r requirements.txt >/dev/null 2>&1
         fi
 
+        comfy --install-completion
+        comfy install --restore
+
         cd /media/"$USER"/RAIDSTATION/AI-Stack-installer/SwarmUI/dlbackend/ComfyUI || exit 1
+        # comfy launch -- --listen 0.0.0.0 --preview-method auto
         python3 main.py --listen 0.0.0.0 --preview-method auto
     fi
 fi
