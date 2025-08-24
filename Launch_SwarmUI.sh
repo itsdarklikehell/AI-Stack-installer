@@ -8,19 +8,19 @@ fi
 if [ -d SwarmUI ]; then
     if [ -d SwarmUI/dlbackend/ComfyUI ]; then
         cd SwarmUI/dlbackend/ComfyUI || exit 1
-        if [ ! -d SwarmUI/dlbackend/ComfyUI/venv ]; then
-            python3 -m venv SwarmUI/dlbackend/ComfyUI/venv
+        if [ ! -d venv ]; then
+            python3 -m venv venv
         fi
         
-        source SwarmUI/dlbackend/ComfyUI/venv/bin/activate
+        source venv/bin/activate
         
         pip install -r requirements.txt
-        pip install -u pip
-        pip install -u comfy-cli
-        
+        pip install --upgrade pip
+        pip install --upgrade comfy-cli
+
         # Install ComfyUI-Manager if not present
-        if [ ! -d SwarmUI/dlbackend/ComfyUI/custom_nodes/ComfyUI-Manager ]; then
-            cd SwarmUI/dlbackend/ComfyUI/custom_nodes || exit 1
+        if [ ! -d custom_nodes/ComfyUI-Manager ]; then
+            cd custom_nodes || exit 1
             git clone --recursive https://github.com/Comfy-Org/ComfyUI-Manager
             cd ComfyUI-Manager || exit 1
             pip install -r requirements.txt
