@@ -107,3 +107,4 @@ if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
 sudo systemctl status SwarmUI
+xdg-open http://localhost:7801
