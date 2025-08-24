@@ -103,5 +103,6 @@ fi
 if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
-watch sudo systemctl status SwarmUI ComfyUI
 xdg-open http://localhost:7801 >/dev/null 2>&1 &
+
+# watch sudo systemctl status SwarmUI ComfyUI

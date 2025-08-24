@@ -26,6 +26,6 @@ if [ -d SwarmUI ]; then
             pip install -r requirements.txt
         fi
     fi
-    cd ../../
-    ./launch-linux.sh "$@"
+    cd /media/rizzo/RAIDSTATION/AI-Stack-installer/SwarmUI || exit 1
+    launch-linux.sh "$@"
 fi
