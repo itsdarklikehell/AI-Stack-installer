@@ -14,18 +14,18 @@ if [ -d SwarmUI ]; then
         
         source venv/bin/activate
         
-        pip install -r requirements.txt
-        pip install --upgrade pip
-        pip install --upgrade comfy-cli
+        pip install -r requirements.txt >/dev/null 2>&1
+        pip install --upgrade pip >/dev/null 2>&1
+        pip install --upgrade comfy-cli >/dev/null 2>&1
 
         # Install ComfyUI-Manager if not present
         if [ ! -d custom_nodes/ComfyUI-Manager ]; then
             cd custom_nodes || exit 1
             git clone --recursive https://github.com/Comfy-Org/ComfyUI-Manager
             cd ComfyUI-Manager || exit 1
-            pip install -r requirements.txt
+            pip install -r requirements.txt >/dev/null 2>&1
         fi
     fi
     cd /media/rizzo/RAIDSTATION/AI-Stack-installer/SwarmUI || exit 1
-    launch-linux.sh "$@"
+    ./launch-linux.sh "$@"
 fi
