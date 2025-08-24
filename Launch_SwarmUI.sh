@@ -26,7 +26,6 @@ if [ -d SwarmUI ]; then
             pip install -r requirements.txt
         fi
     fi
-    
-    cd SwarmUI || exit 1
+    cd ../../
     ./launch-linux.sh "$@"
 fi

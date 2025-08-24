@@ -14,9 +14,6 @@ if [ ! -d ~/bin ]; then
     echo "Created ~/bin directory"
     mkdir ~/bin
 fi
-ln -s install-SwarmUI-linux.sh ~/bin/ >/dev/null 2>&1
-ln -s Launch_ComfyUI.sh ~/bin/ >/dev/null 2>&1
-ln -s Launch_SwarmUI.sh ~/bin/ >/dev/null 2>&1
 
 # Ensure correct local path.
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -107,4 +104,4 @@ if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
 fi
 sudo systemctl status SwarmUI
-xdg-open http://localhost:7801
+xdg-open http://localhost:7801 >/dev/null 2>&1 &
