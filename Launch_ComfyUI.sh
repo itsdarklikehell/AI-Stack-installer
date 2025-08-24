@@ -1,6 +1,6 @@
 #!/bin/bash
 export UV_LINK_MODE=copy
-cd /media/rizzo/RAIDSTATION/AI-Stack-installer || exit 1
+cd /media/"$USER"/RAIDSTATION/AI-Stack-installer || exit 1
 
 if [ ! -d SwarmUI ]; then
     install-SwarmUI-linux.sh
@@ -26,7 +26,7 @@ if [ -d SwarmUI ]; then
             pip install -r requirements.txt >/dev/null 2>&1
         fi
 
-        cd /media/rizzo/RAIDSTATION/AI-Stack-installer/SwarmUI/dlbackend/ComfyUI || exit 1
+        cd /media/"$USER"/RAIDSTATION/AI-Stack-installer/SwarmUI/dlbackend/ComfyUI || exit 1
         python3 main.py --listen 0.0.0.0 --preview-method auto
     fi
 fi

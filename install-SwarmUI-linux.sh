@@ -68,8 +68,8 @@ After=network.target
 Restart=on-failure
 RestartSec=5s
 Type=simple
-User=rizzo
-Group=rizzo
+User=$USER
+Group=$USER
 WorkingDirectory=$SCRIPT_DIR/SwarmUI
 ExecStart=$SCRIPT_DIR/Launch_SwarmUI.sh
 
@@ -86,8 +86,8 @@ After=network.target
 Restart=on-failure
 RestartSec=5s
 Type=simple
-User=rizzo
-Group=rizzo
+User=$USER
+Group=$USER
 WorkingDirectory=$SCRIPT_DIR/ComfyUI
 ExecStart=$SCRIPT_DIR/Launch_ComfyUI.sh
 
