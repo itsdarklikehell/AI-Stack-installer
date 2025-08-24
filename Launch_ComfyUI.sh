@@ -21,14 +21,14 @@ if [ -d SwarmUI ]; then
         # Install ComfyUI-Manager if not present
         if [ ! -d custom_nodes/ComfyUI-Manager ]; then
             cd custom_nodes || exit 1
-            git clone --recursive https://github.com/Comfy-Org/ComfyUI-Manager
+            git clone --recursive https://github.com/Comfy-Org/ComfyUI-Manager >/dev/null 2>&1
             cd ComfyUI-Manager || exit 1
             pip install -r requirements.txt >/dev/null 2>&1
         fi
 
         cd "/media/$USER/RAIDSTATION/AI-Stack-installer/SwarmUI/dlbackend/ComfyUI" || exit 1
 
-        if [ ! -f main.py ]; then
+        if [ -f main.py ]; then
             python3 main.py --listen 0.0.0.0 --preview-method auto
         fi
     fi

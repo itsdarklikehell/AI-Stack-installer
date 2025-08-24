@@ -89,7 +89,7 @@ Type=simple
 User=$USER
 Group=$USER
 WorkingDirectory=$SCRIPT_DIR/SwarmUI/dlbackend/ComfyUI
-ExecStart=$SCRIPT_DIR/Launch_ComfyUI.sh
+ExecStart=$SCRIPT_DIR/SwarmUI/dlbackend/ComfyUI/venv/bin/python3 $SCRIPT_DIR/SwarmUI/dlbackend/ComfyUI/main.py --listen 0.0.0.0
 
 [Install]
 WantedBy=multi-user.target
@@ -98,10 +98,12 @@ EOF
 sudo systemctl daemon-reload
 if [ -f /etc/systemd/system/SwarmUI.service ]; then
     sudo systemctl start SwarmUI
+    sudo systemctl enable SwarmUI
 fi
 
 if [ -f /etc/systemd/system/ComfyUI.service ]; then
     sudo systemctl start ComfyUI
+    sudo systemctl enable ComfyUI
 fi
 # xdg-open http://localhost:7801 >/dev/null 2>&1 &
 
