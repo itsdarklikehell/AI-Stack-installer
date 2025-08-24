@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+export UV_LINK_MODE=copy
+
+sudo systemctl stop SwarmUI
+sudo systemctl stop ComfyUI
+
+if [ ! -d ~/bin ]; then
+    echo "Created ~/bin directory"
+    mkdir ~/bin
+fi
+ln -s install-SwarmUI-linux.sh ~/bin/
+ln -s Launch_ComfyUI.sh ~/bin/
+ln -s Launch_SwarmUI.sh ~/bin/
+
+# Ensure correct local path.
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "$SCRIPT_DIR" || exit 1
+
+# Accidental run prevention
+if [ -d "SwarmUI" ]; then
+    echo "SwarmUI already exists in this directory. Do you want to move it to a backup location? (y/n)"
+    read -r answer
+    if [ "$answer" == "y" ]; then
+        mv SwarmUI SwarmUI-OLD-"$(date +%s)"
+    else
+        exit 1
+    fi
+fi
+if [ -f "SwarmUI.sln" ]; then
+    echo "SwarmUI already exists in this directory. Do you want to move it to a backup location? (y/n)"
+    read -r answer
+    if [ "$answer" == "y" ]; then
+        mv SwarmUI.sln SwarmUI-OLD-"$(date +%s)".sln
+    else
+        exit 1
+    fi
+fi
+
+# Download swarm
+git clone --recursive https://github.com/mcmonkeyprojects/SwarmUI
+cd SwarmUI || exit 1
+
+# install dotnet
+cd launchtools || exit 1
+rm dotnet-install.sh
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
+wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+chmod +x dotnet-install.sh
+cd ..
+
+# Note: manual installers that want to avoid home dir, add to both of the below lines: --install-dir $SCRIPT_DIR/.dotnet
+./launchtools/dotnet-install.sh --channel 8.0 --runtime aspnetcore
+./launchtools/dotnet-install.sh --channel 8.0
+
+# Launch
+# ./launch-linux.sh "$@"
+
+# Setup systemd services
+cat << EOF | sudo tee /etc/systemd/system/SwarmUI.service > /dev/null
+[Unit]
+Description=SwarmUI Service
+After=network.target
+
+[Service]
+Restart=on-failure
+RestartSec=5s
+Type=simple
+User=rizzo
+Group=rizzo
+WorkingDirectory=$SCRIPT_DIR/SwarmUI
+ExecStart=/home/rizzo/bin/Launch_SwarmUI.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat << EOF | sudo tee /etc/systemd/system/ComfyUI.service > /dev/null
+[Unit]
+Description=ComfyUI Service
+After=network.target
+
+[Service]
+Restart=on-failure
+RestartSec=5s
+Type=simple
+User=rizzo
+Group=rizzo
+WorkingDirectory=$SCRIPT_DIR/ComfyUI
+ExecStart=/home/rizzo/bin/Launch_ComfyUI.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+if [ -d /media/rizzo/RAIDSTATION/SwarmUI ]; then
+    sudo systemctl start SwarmUI
+fi
+
+if [ -d /media/rizzo/RAIDSTATION/SwarmUI/dlbackend/ComfyUI ]; then
+    sudo systemctl start ComfyUI
+fi
